@@ -92,5 +92,5 @@ void showLeaderboard(const char *topicName,
 // สร้างชื่อไฟล์ leaderboard ตามชื่อ topic
 // เช่น topicName = "Logic" -> "Logic_leaderboard.txt"
 void buildLeaderboardFilename(const char *topicName, char *out, size_t outSize) {
-    snprintf(out, outSize, "%s_leaderboard.txt", topicName);
+    snprintf(out, outSize, "data/%s_leaderboard.txt", topicName);
 }

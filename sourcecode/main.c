@@ -104,23 +104,23 @@ int main(void) {
         // ---------- กรณีเลือกหัวข้อเพื่อทำ quiz (1–5) ----------
         switch (choice) {
             case '1':
-                strcpy(questionFile, "logic.txt");
+                strcpy(questionFile, "data/logic.txt");
                 strcpy(topicName, "Logic");
                 break;
             case '2':
-                strcpy(questionFile, "bigo.txt");
+                strcpy(questionFile, "data/bigo.txt");
                 strcpy(topicName, "BigO");
                 break;
             case '3':
-                strcpy(questionFile, "relations.txt");
+                strcpy(questionFile, "data/relations.txt");
                 strcpy(topicName, "Relations");
                 break;
             case '4':
-                strcpy(questionFile, "counting.txt");
+                strcpy(questionFile, "data/counting.txt");
                 strcpy(topicName, "Counting");
                 break;
             case '5':
-                strcpy(questionFile, "advcounting.txt");
+                strcpy(questionFile, "data/advcounting.txt");
                 strcpy(topicName, "AdvCounting");
                 break;
             default:
