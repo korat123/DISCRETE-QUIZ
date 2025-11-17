@@ -1,0 +1,17 @@
+Kor;Logic;2
+Kor;BigO;0
+Kor;Logic;2
+Kor;Logic;1
+Kor;Logic;3
+Kor;Logic;1
+Kor;Logic;2
+Kor;Logic;2
+Kor;Logic;1
+Kor;Logic;3
+Kor;Logic;0
+Kor;Logic;3
+Kor;Logic;1
+Kor;Logic;1
+Kor;Logic;1
+Kor;Logic;1
+Kor;BigO;3

@@ -1,0 +1,5 @@
+M|1|Which of the following formulas is a tautology?|p or ~p|p and ~p|p -> p|~(p or q)|p <-> ~p|C|The implication p -> p is always true for every truth assignment of p.
+M|2|Which of the following is logically equivalent to p -> q?|~p or q|p and q|~p and q|p or q|p <-> q|A|The implication p -> q is equivalent to ~p or q.
+M|3|What is the negation of the statement: 'p and q'?|~p and ~q|~p or ~q|p or q|~(p or q)|p -> ~q|B|By De Morgan's law, ~(p and q) equivalent ~p or ~q.
+M|4|Which of the following is a contradiction?|p and ~p|p or ~p|p -> p|p <-> p|~(p or ~p)|A|p and ~p is always false, so it is a contradiction.
+M|5|Which of the following is logically equivalent to ~(p or q)?|~p and ~q|~p or ~q|p and q|p or q|p <-> ~q|A|By De Morgan's law, ~(p or q) equivalence ~p and ~q.
