@@ -1,11 +1,12 @@
 # DISCRETE-QUIZ
-Final Project for ComProgramming 
+Final Project for Computer Programming for engineering 
 
 # How to use?
 1. Create Folder in your desktop.
 2. Download all files and stored it to the desktop folder that you have create.
-3. Open cmd and direct to desktop folder and then to folder that you stored all files.
-4. Run this command "gcc sourcecode/main.c sourcecode/util.c sourcecode/questions.c sourcecode/leaderboard.c sourcecode/quiz_logic.c -Iinclude -o discrete_quiz.exe -std=c11 -Wall -Wextra".
+3. Open cmd or Vs-code (if desktop direct to desktop folder and then to folder that you stored all files).
+4. Run this command(in cmd or Vs-code) ".\build.bat", and you will see "Discrete_quiz.exe" appears on your project folder.
+5. after that type ".\Discrete_quiz.exe", and then enjoy the project.
 
 # Summary of Each File's Function
 
@@ -27,7 +28,9 @@ Final Project for ComProgramming
 **main.c** 
 - Handles the user interface (UI) via a console menu: selecting a quiz topic, opting to only view the leaderboard, reading the player's name, calling functions from other modules, and serving as the program's entry point (main()).
 
-# Git command
+
+
+# Git command **(If you want to fix something in this code)**
 
 If command "git" not found go load from this website:
 <https://git-scm.com/install/windows>
