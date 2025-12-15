@@ -1,6 +1,6 @@
 #include "quiz.h"
 
-// ฟังก์ชันโหลดบทเรียนจากไฟล์ lessons.txt
+// lessons.txt loading function
 int loadLessons(const char *filename, Lesson lessons[], int maxLessons) {
     FILE *fp = fopen(filename, "r");
     if (!fp) return 0;
@@ -25,26 +25,26 @@ int loadLessons(const char *filename, Lesson lessons[], int maxLessons) {
     return count;
 }
 
-// Struct สำหรับคำนวณ Skill (ใช้เฉพาะในไฟล์นี้)
+// Struct for compute user's Skill (use only In this file)
 typedef struct {
     char tagName[100];
     int total;
     int correct;
 } TagStat;
 
-// ฟังก์ชันช่วยแสดง Hint
+// Show Hint function
 void printHints(Question *q, int hintsRevealed) {
     if (hintsRevealed >= 1) printf("\n   [HINT 1]: %s", q->hint1);
     if (hintsRevealed >= 2) printf("\n   [HINT 2]: %s", q->hint2);
     if (hintsRevealed > 0) printf("\n");
 }
 
-// [UPDATED] ฟังก์ชันวิเคราะห์ผลและสอนซ่อมเสริมแบบ Loop หลายเรื่อง
+//  User Analysis and show lessons(In loop for many sub-topics) function
 void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson lessons[], int lessonCount) {
     TagStat stats[20];
     int statCount = 0;
 
-    // 1. คำนวณสถิติ (เหมือนเดิม)
+    // 1. statistic compute
     for (int i = 0; i < numAsked; i++) {
         Question *cur = &q[attempts[i].qIndex];
         int isCorrect = attempts[i].isCorrect;
@@ -71,11 +71,11 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
         if (isCorrect) stats[foundIndex].correct++;
     }
 
-    // เตรียมตัวแปรสำหรับเก็บ index ของหัวข้อที่อ่อน
+    // Variables to store user's weak
     int weakIndices[20]; 
     int weakCount = 0;
 
-    // 2. แสดงผลตารางคะแนน พร้อมเก็บรายชื่อหัวข้อที่ต้องเรียนเพิ่ม
+    // 2. Show results and store sub-topics that user need to learn more
     clearScreen();
     printf("\n========================================\n");
     printf("       AI TUTOR: SKILL ANALYSIS\n");
@@ -90,13 +90,13 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
         }
         
         char status[50];
-        // [CONFIG] ตรงนี้คือเกณฑ์การวัดผล (สามารถปรับเลข 50.0f ได้ตามใจชอบ)
+        // Scoring Criterias (can adapting 50.0f up to you)
         if (percent == 100.0f) strcpy(status, "Excellent");
         else if (percent >= 70.0f) strcpy(status, "Good");
         else if (percent >= 50.0f) strcpy(status, "Fair");
         else {
-            strcpy(status, "WEAK (Review!)"); // ต่ำกว่า 50% ถือว่า Weak
-            weakIndices[weakCount] = i;       // จำ index ไว้สอน
+            strcpy(status, "WEAK (Review!)"); // if sub-topic's score < 50% = weak 
+            weakIndices[weakCount] = i;       // store index to show lessons
             weakCount++;
         }
 
@@ -105,7 +105,7 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
     }
     printf("========================================\n");
 
-    // 3. AI Tutor แนะนำบทเรียน (Loop สอนทุกเรื่องที่อ่อน)
+    // 3. AI Tutor suggest study (Loop teach user's weak all sub-topics)
     if (weakCount > 0) {
         printf("\n[AI Suggestion]: I detected weaknesses in %d topics:\n", weakCount);
         for(int k=0; k<weakCount; k++) {
@@ -118,15 +118,15 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
         int c; while ((c = getchar()) != '\n' && c != EOF) {} // flush
 
         if (tolower(choice) == 'y') {
-            // Loop สอนทีละเรื่อง
+            // Loop teach each sub-topic
             for (int k = 0; k < weakCount; k++) {
-                int idx = weakIndices[k]; // Index ของ topic ใน stats
+                int idx = weakIndices[k]; // Index of topic in user's stats
                 char *currentTag = stats[idx].tagName;
 
                 clearScreen();
                 printf("\n===== Lesson %d/%d: %s =====\n\n", k+1, weakCount, currentTag);
                 
-                // ค้นหาเนื้อหา
+                // search lessons
                 int lessonFound = 0;
                 for(int j=0; j<lessonCount; j++) {
                     if(strcmp(lessons[j].tag, currentTag) == 0) {
@@ -157,6 +157,7 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
     }
 }
 
+// Starting do quiz function
 int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked) {
     if (totalQ <= 0) {
         printf("No questions loaded.\n");
@@ -170,7 +171,7 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
     shuffle(indices, totalQ);
 
     int score = 0;
-    int numAsked = totalQ; // หรือกำหนดจำนวนข้อที่ต้องการตรงนี้
+    int numAsked = totalQ; 
 
     clearScreen();
     printf("\nStarting quiz: %s\n", topicName);
@@ -184,8 +185,8 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
         attempts[i].isCorrect = 0;
         attempts[i].hintsUsed = 0;
 
-        // --- [SHUFFLE LOGIC] สร้างลำดับสุ่มสำหรับข้อนี้ ---
-        // สร้าง array [0,1,2,3,4] แล้วสลับที่
+        // --- [SHUFFLE LOGIC] create shuffle order ---
+        // create array [0,1,2,3,4] and do shuffle
         for (int k = 0; k < 5; k++) attempts[i].shuffledOrder[k] = k;
         shuffle(attempts[i].shuffledOrder, 5);
         // ----------------------------------------------
@@ -193,13 +194,13 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
         while (1) {
             clearScreen();
             printf("\n------------------------------------\n");
-            printf("Question %d (ID %d) [%s]:\n", i + 1, cur->id, cur->tags); // โชว์ Tag ให้เห็นด้วยเลย
+            printf("Question %d (ID %d) [%s]:\n", i + 1, cur->id, cur->tags); // show tags to debug problems(for programmers not user)
             printf("%s\n\n", cur->question);
 
-            // แสดง Choice ตามลำดับที่สุ่มมา (Mapping)
-            // A จะดึง content จาก choices[shuffledOrder[0]]
+            // show Choice from shuffle order (Mapping)
+            // A will pull content from choices[shuffledOrder[0]]
             for (int k = 0; k < 5; k++) {
-                int realIdx = attempts[i].shuffledOrder[k]; // Index จริงใน struct
+                int realIdx = attempts[i].shuffledOrder[k]; // Real index in struct
                 printf("%c) %s\n", 'A' + k, cur->choices[realIdx]);
             }
 
@@ -211,7 +212,7 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
             
             char ans = (char)toupper((unsigned char)inputBuf[0]);
 
-            // ขอ Hint
+            // if user enter 'H' for hint
             if (ans == 'H') {
                 if (attempts[i].hintsUsed < 2) {
                     attempts[i].hintsUsed++;
@@ -223,17 +224,17 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
                 }
             }
 
-            // ตอบคำถาม
+            // answer parts
             if (ans >= 'A' && ans <= 'E') {
-                int selectedChoiceIndex = ans - 'A'; // ผู้ใช้เลือก A(0), B(1)...
+                int selectedChoiceIndex = ans - 'A'; // User answer:  A(0), B(1)...
                 
-                // แปลงกลับเป็น Index จริงของข้อมูล
+                // Convert back to real index of data
                 int actualDataIndex = attempts[i].shuffledOrder[selectedChoiceIndex];
 
                 attempts[i].userAnswerChar = ans;
-                attempts[i].userAnswerIndex = selectedChoiceIndex; // เก็บตำแหน่งที่เลือกบนหน้าจอ
+                attempts[i].userAnswerIndex = selectedChoiceIndex; // stored choice position that user choose
                 
-                // เทียบกับคำตอบที่ถูก (correctIndex คือ index จริงใน Database)
+                // compare user's answer with problem's correct answer(correctIndex = Real index from Database)
                 if (actualDataIndex == cur->correctIndex) {
                     attempts[i].isCorrect = 1;
                     score++;
@@ -247,14 +248,14 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
         }
     }
 
-    // [ADD] โหลดบทเรียนเตรียมไว้ก่อนเรียก Analysis
+    // Loading lessons
     Lesson lessons[50];
     int lessonCount = loadLessons("data/lessons.txt", lessons, 50);
 
     *outNumAsked = numAsked;
     pauseAndClear(DELAY_MED);
     
-    // [CHANGE] ส่ง lessons เข้าไปในฟังก์ชัน
+    // sending out skill result and ask for lessons
     printSkillAnalysis(q, attempts, numAsked, lessons, lessonCount);
 
     return score;
@@ -277,7 +278,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
     int c; while ((c = getchar()) != '\n' && c != EOF) {}
 
     if (tolower(choice) != 'y') {
-        // --- เฉลยเลย (Logic เหมือนเดิม แต่ต้อง Map choice ให้ถูก) ---
+        // --- give the answer (Same Logic, but need to mapping correct choice ) ---
         clearScreen();
         printf("\nShowing correct answers...\n");
         wait_ms(DELAY_MED);
@@ -289,8 +290,8 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                 clearScreen();
                 printf("Question ID %d:\n%s\n\n", cur->id, cur->question);
                 
-                // แสดง Choice เรียงตามปกติ (หรือจะเรียงตามที่สุ่มก็ได้ แต่เฉลยควรเรียงปกติเพื่อง่ายต่อการอ่าน)
-                // *แต่* เพื่อให้ตรงกับที่ User ตอบมา เราควรแสดงตาม Shuffled Order เดิมดีกว่า
+                // Show correct answer choice
+                // show in shuffle ordering form
                 for (int k=0; k<5; k++) {
                     int realIdx = attempts[i].shuffledOrder[k];
                     printf("%c) %s\n", 'A'+k, cur->choices[realIdx]);
@@ -298,7 +299,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
 
                 printf("\nYour answer: %c\n", attempts[i].userAnswerChar);
                 
-                // หาว่าคำตอบที่ถูก (cur->correctIndex) ตอนนี้ไปอยู่ตัวอักษรไหน (A-E)
+                // find where is the correct answer of problem (cur->correctIndex) (A-E)
                 char correctChar = '?';
                 for(int k=0; k<5; k++) {
                     if (attempts[i].shuffledOrder[k] == cur->correctIndex) {
@@ -330,7 +331,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                 printf("\n--- RETRY ---\n");
                 printf("Question ID %d:\n%s\n\n", cur->id, cur->question);
                 
-                // [IMPORTANT] ใช้ shuffledOrder เดิมจาก attempt
+                // Use old shuffle odering form
                 for (int k=0; k<5; k++) {
                     int realIdx = attempts[i].shuffledOrder[k];
                     printf("%c) %s\n", 'A'+k, cur->choices[realIdx]);
@@ -365,7 +366,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                     } else {
                         printf("\nStill Incorrect.\n");
                         
-                        // หาตัวอักษรที่ถูก
+                        // find the correct answer
                         char correctChar = '?';
                         for(int k=0; k<5; k++) {
                             if (attempts[i].shuffledOrder[k] == cur->correctIndex) {

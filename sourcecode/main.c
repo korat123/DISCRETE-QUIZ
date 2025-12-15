@@ -40,6 +40,7 @@ int main(void) {
     printf("\n===== So letss goo!!!! =====\n");
     pauseAndClear(DELAY_MED);
 
+    // --------- In case: exit----------
     while (1) {
         clearScreen();
         char choice = showMenu();
@@ -50,7 +51,7 @@ int main(void) {
             break;
         }
 
-        // ---------- กรณีเลือกดู leaderboard อย่างเดียว ----------
+        // ---------- In Case: choose leaderboard only ----------
         if (choice == '6') {
             char lbChoice;
             while (1) {
@@ -106,7 +107,7 @@ int main(void) {
             continue;
         }
 
-        // ---------- กรณีเลือกหัวข้อเพื่อทำ quiz (1–5) ----------
+        // ---------- In case: select quiz topics (1–5) ----------
         switch (choice) {
             case '1':
                 strcpy(questionFile, "data/logic.txt");

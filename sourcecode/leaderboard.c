@@ -1,9 +1,11 @@
 #include "quiz.h"
 
+
+// loading data from leaderboard.txt function
 int loadLeaderboard(const char *filename, ScoreEntry entries[], int maxEntries) {
     FILE *fp = fopen(filename, "r");
     if (!fp) {
-        return 0; // ยังไม่มีไฟล์
+        return 0; // No files found
     }
 
     char line[256];
@@ -34,6 +36,7 @@ int loadLeaderboard(const char *filename, ScoreEntry entries[], int maxEntries) 
     return count;
 }
 
+// Save score in leaderboard file function
 void saveScore(const char *filename, const char *name, const char *topic, int score) {
     FILE *fp = fopen(filename, "a");
     if (!fp) {
@@ -45,6 +48,7 @@ void saveScore(const char *filename, const char *name, const char *topic, int sc
     fclose(fp);
 }
 
+// Show leaderboard from any topic's leaderboard function
 void showLeaderboard(const char *topicName,
                      ScoreEntry entries[], int count,
                      const char *currentPlayerName) {
@@ -55,7 +59,7 @@ void showLeaderboard(const char *topicName,
         return;
     }
 
-    // sort ตามคะแนน มาก→น้อย
+    // sort score up on points from high tp low
     for (int i = 0; i < count - 1; i++) {
         for (int j = 0; j < count - 1 - i; j++) {
             if (entries[j].score < entries[j + 1].score) {
@@ -89,8 +93,8 @@ void showLeaderboard(const char *topicName,
     wait_ms(DELAY_LONG);
 }
 
-// สร้างชื่อไฟล์ leaderboard ตามชื่อ topic
-// เช่น topicName = "Logic" -> "Logic_leaderboard.txt"
+// create leaderboard file and named it each topics
+// Example: topicName = "Logic" -> "Logic_leaderboard.txt"
 void buildLeaderboardFilename(const char *topicName, char *out, size_t outSize) {
     snprintf(out, outSize, "data/%s_leaderboard.txt", topicName);
 }

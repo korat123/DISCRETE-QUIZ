@@ -4,7 +4,7 @@
 #include <windows.h>
 #endif
 
-// ตัด \n / \r ท้ายสตริง
+// cut \n / \r in end of string
 void trimNewline(char *s) {
     size_t len = strlen(s);
     while (len > 0 && (s[len - 1] == '\n' || s[len - 1] == '\r')) {
@@ -13,7 +13,7 @@ void trimNewline(char *s) {
     }
 }
 
-// ยังไม่ได้ใช้ แต่เผื่ออยากเช็ค text ในอนาคต
+// Doesn't use just for text test
 void normalizeAnswer(char *dst, const char *src) {
     int j = 0;
     for (int i = 0; src[i] != '\0'; i++) {
@@ -24,7 +24,7 @@ void normalizeAnswer(char *dst, const char *src) {
     dst[j] = '\0';
 }
 
-// shuffle array ของ index
+// shuffle array of index
 void shuffle(int arr[], int n) {
     for (int i = n - 1; i > 0; i--) {
         int j = rand() % (i + 1);
@@ -34,7 +34,7 @@ void shuffle(int arr[], int n) {
     }
 }
 
-// หน่วงเวลา (ms)
+// Time's delay(ms)
 void wait_ms(int ms) {
 #ifdef _WIN32
     Sleep(ms);
@@ -46,7 +46,7 @@ void wait_ms(int ms) {
 #endif
 }
 
-// เคลียร์หน้าจอ
+// clear screen
 void clearScreen(void) {
 #ifdef _WIN32
     system("cls");
@@ -55,23 +55,23 @@ void clearScreen(void) {
 #endif
 }
 
-// หน่วงแล้วค่อยเคลียร์จอ
+// Delay and clear
 void pauseAndClear(int ms) {
     wait_ms(ms);
     clearScreen();
 }
 
-// รอจนกว่า user จะกด y หรือ Y แล้วกด Enter
+// wait until user press y or Y and then Enter
 void waitForNext(const char *prompt) {
     char buf[16];
     while (1) {
         printf("%s", prompt);
         if (fgets(buf, sizeof(buf), stdin) == NULL) {
-            return; // ถ้าอ่านไม่ได้ก็ออกเลย
+            return; // if can't read then will exit
         }
         if (buf[0] == 'y' || buf[0] == 'Y') {
             break;
         }
-        // ถ้าพิมพ์อย่างอื่น ก็ถามซ้ำอีกรอบ
+        // if users type others words then re-ask again 
     }
 }

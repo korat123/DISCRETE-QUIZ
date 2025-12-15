@@ -63,9 +63,9 @@ int loadQuestions(const char *filename, Question q[], int maxQ) {
         else strcpy(cur->hint2, "No second hint.");
 
         // Tags
-        token = strtok(NULL, ""); // เอาจนจบบรรทัด
+        token = strtok(NULL, ""); // until end of line
         if (token) {
-            // ลบ | ตัวหน้าถ้ามีติดมา (เผื่อ strtok ทำงานต่างกันในบาง compiler)
+            // delete | that are in the front (In case: strtok work in different way on others compiler)
              if (token[0] == '|') token++;
             strncpy(cur->tags, token, 99);
             cur->tags[99] = '\0';

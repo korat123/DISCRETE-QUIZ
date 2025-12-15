@@ -7,14 +7,14 @@
 #include <time.h>
 #include <ctype.h>
 
-// ---------------------- ค่าคงที่ / struct ----------------------
+// ---------------------- constant / struct ----------------------
 
 #define MAX_Q      50
 #define MAX_TEXT   512
 #define MAX_NAME   50
 #define MAX_LEADER 200
 
-// ระยะเวลา delay (มิลลิวินาที)
+// time's delay (milisec)
 #define DELAY_SHORT  800
 #define DELAY_MED   1500
 #define DELAY_LONG  2200
@@ -24,15 +24,15 @@ typedef struct {
     int type;                       
     char question[MAX_TEXT];
 
-    // Choice แบบ Array (รองรับ Phase ถัดไปเรื่อง Shuffle)
+    // Array Choice (for Shuffle function)
     char choices[5][200]; 
     
-    // คำตอบที่ถูกเก็บเป็น Index (0=A, 1=B, ..., 4=E)
+    // Stor correct answer Index (0=A, 1=B, ..., 4=E)
     int correctIndex;             
     
     char explanation[MAX_TEXT];
 
-    // Hint และ Tags
+    // Hint and Tags
     char hint1[MAX_TEXT];
     char hint2[MAX_TEXT];
     char tags[100];       
@@ -41,11 +41,11 @@ typedef struct {
 typedef struct {
     int qIndex;
     int isCorrect;
-    char userAnswerChar;     // เก็บคำตอบ A-E
-    int userAnswerIndex;     // เก็บ 0-4 (เผื่อใช้)
+    char userAnswerChar;     // stor answer A-E
+    int userAnswerIndex;     // store 0-4 (๋Just in case)
     
-    int hintsUsed;           // เก็บจำนวน hint ที่เปิดใช้ไปแล้ว (0, 1, 2)
-    int shuffledOrder[5];    // เตรียมไว้สำหรับ Phase Shuffle (ตอนนี้เรียง 0-4 ไปก่อน)
+    int hintsUsed;           // store hint used times(0, 1, 2)
+    int shuffledOrder[5];    // for Shuffle function
 } Attempt;
 
 typedef struct {
@@ -54,10 +54,10 @@ typedef struct {
     int score;
 } ScoreEntry;
 
-// Struct สำหรับเก็บเนื้อหาบทเรียน
+// Struct for mini lessons
 typedef struct {
-    char tag[50];          // ชื่อ Tag เช่น Logic_Basics
-    char content[512];     // เนื้อหาบทเรียน
+    char tag[50];          // Name: Tag Ex. Logic_Basics
+    char content[512];     // lessons informations
 } Lesson;
 
 
@@ -82,10 +82,10 @@ void buildLeaderboardFilename(const char *topicName, char *out, size_t outSize);
 int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked);
 void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked);
 
-// เพิ่ม prototype โหลดบทเรียน
+// Add prototype loading lessons
 int loadLessons(const char *filename, Lesson lessons[], int maxLessons);
 
-// ฟังก์ชันวิเคราะห์จุดอ่อน
+// Analyze user weak function
 void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson lessons[], int lessonCount);
 
 // ---------------------- prototypes: UI ---------------------------
