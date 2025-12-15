@@ -4,13 +4,17 @@ char showMenu(void) {
     char ch;
     
     printf("\n===== Welcome to Discrete Mathematics Quiz =====\n");
+    printf("\n===== Topics =====\n");
     printf("1. Logic\n");
     printf("2. BigO\n");
     printf("3. Relations\n");
     printf("4. Counting\n");
     printf("5. Advanced Counting\n");
+    printf("\n===== Leaderboard =====\n");
     printf("6. View leaderboard only\n");
-    printf("0. Exit\n");
+    printf("\n0. Exit\n");
+
+
     printf("Choose topic that you want to try: ");
     scanf(" %c", &ch);
     return ch;
@@ -31,7 +35,7 @@ int main(void) {
     wait_ms(DELAY_MED);
     printf("\n===== Our work is creating Discrete Mathematics Quiz =====\n");
     wait_ms(DELAY_MED);
-    printf("\n===== We hope you guys will enjoing this project =====\n");
+    printf("\n===== We hope you guys will enjoying this project =====\n");
     wait_ms(DELAY_MED);
     printf("\n===== So letss goo!!!! =====\n");
     pauseAndClear(DELAY_MED);
@@ -40,7 +44,8 @@ int main(void) {
         clearScreen();
         char choice = showMenu();
         if (choice == '0') {
-            printf("Thank you for your attendtion, See ya!!!\n");
+            clearScreen();
+            printf("\nThank you for your attendtion, See ya!!!\n");
             pauseAndClear(DELAY_MED);
             break;
         }
@@ -56,7 +61,7 @@ int main(void) {
                 printf("3. Relations\n");
                 printf("4. Counting\n");
                 printf("5. Advanced Counting\n");
-                printf("0. Back to main menu\n");
+                printf("\n0. Back to main menu\n");
                 printf("Choose topic: ");
                 scanf(" %c", &lbChoice);
 

@@ -1,2 +1,6 @@
 Peatong;AdvCounting;1
 Wit;AdvCounting;0
+ING;AdvCounting;0
+Earth;AdvCounting;1
+Kor;AdvCounting;0
+Korn;AdvCounting;0

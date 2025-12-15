@@ -1,5 +1,20 @@
-M|1|How many permutations are there of 5 distinct objects?|5|10|20|60|120|E|The number of permutations of 5 distinct objects is 5! = 120.
-M|2|How many ways can you choose 3 elements from a set of 7 elements (order does not matter)?|7|21|35|42|56|C|The number of combinations is C(7,3) = 35.
-M|3|How many 4-digit codes can be formed from digits 0-9 if repetition is allowed and the first digit cannot be 0?|9000|10000|900|8100|4500|A|First digit has 9 choices (1-9), the other three have 10 choices each, so 9x10x10x10 = 9000.
-M|4|In how many ways can 4 people sit in a row of 4 chairs?|4|8|12|16|24|E|There are 4! = 24 ways to arrange 4 distinct people in 4 seats.
-M|5|How many subsets does a set with 6 elements have?|6|12|32|64|36|D|A set with n elements has 2^n subsets, so 2^6 = 64.
+M|1|Product Rule: If task A has n ways and task B has m ways, both A AND B have:|n + m|n * m|n^m|m^n|n!|B|AND implies multiplication.|Sequential tasks.|Multiply choices.|Counting_Basics
+M|2|Sum Rule: Task A (n ways) OR Task B (m ways), disjoint:|n + m|n * m|n - m|n / m|n!|A|OR (disjoint) implies addition.|Alternative choices.|Add options.|Counting_Basics
+M|3|Permutation P(n, r) formula:|n! / (n-r)!|n! / r!(n-r)!|n!|n^r|r!|A|Order matters. We divide out the tail we don't pick.|Arrangement.|No r! in denominator.|Counting_Permutations
+M|4|Combination C(n, r) formula:|n! / (n-r)!|n! / r!(n-r)!|n!|n^r|r^n|B|Order does NOT matter. Divide by r! to remove duplicates.|Selection/Choosing.|Subset formula.|Counting_Combinations
+M|5|How many ways to arrange letters ABCDE?|5|25|120|60|10|C|5 distinct items = 5!|5*4*3*2*1.|Factorial.|Counting_Permutations
+M|6|How many bit strings of length 8?|8|16|64|256|512|D|Each bit has 2 options. 2^8.|2*2*... 8 times.|Byte size.|Counting_Basics
+M|7|How many subsets of {1, 2, 3}?|3|6|8|9|12|C|Power set size is 2^n. 2^3 = 8.|Include empty set and full set.|2 to the power of 3.|Counting_Subsets
+M|8|Selecting 3 students from 10 for a team (no roles):|P(10,3)|C(10,3)|10^3|3^10|10!|B|Team implies order doesn't matter.|Combination.|Choose 3.|Counting_Combinations
+M|9|Selecting President, VP, Treasurer from 10 people:|P(10,3)|C(10,3)|10^3|30|1000|A|Roles imply order matters. A,B,C is different from B,A,C.|Permutation.|Arrange 3.|Counting_Permutations
+M|10|License plate: 3 letters then 3 digits (0-9). How many?|26*26*26 + 10*10*10|26^3 * 10^3|P(26,3)*P(10,3)|C(26,3)*C(10,3)|26! * 10!|B|Product rule. 26 choices for each letter, 10 for each digit.|Multiply independent choices.|26*26*26*10*10*10.|Counting_Basics
+M|11|How many ways to arrange "APPLE"?|120|60|24|5|10|B|5 letters, 2 Ps are identical. 5!/2!|Distinguishable permutations.|120 / 2.|Counting_AdvPermutations
+M|12|How many integers 1-100 are divisible by 2 or 5?|50|20|70|60|100|C|Inclusion-Exclusion. Div2 + Div5 - Div10.|50 + 20 - 10.|Avoid double counting.|Counting_InclusionExclusion
+M|13|Coefficient of x^2 y^3 in (x+y)^5?|5|10|20|15|1|B|Binomial Theorem: C(5, 2) or C(5, 3).|Pascal's triangle row 5.|10.|Counting_Binomial
+M|14|15 pigeons, 14 holes. At least one hole has:|1 pigeon|2 pigeons|3 pigeons|0 pigeons|15 pigeons|B|Pigeonhole Principle. n > k.|Ceiling(15/14).|Cannot fit 1 in each.|Counting_Pigeonhole
+M|15|Number of ways to sit 5 people around a round table:|120|24|60|10|5|B|Circular permutation: (n-1)!|Fix one person, arrange others.|4!|Counting_Permutations
+M|16|Choose 2 items from {A, B, C, D} with repetition allowed?|10|16|6|C(4,2)|4!|A|Stars and Bars C(n+r-1, r) -> C(4+2-1, 2) = C(5,2).|Or list them: AA,AB,AC...|Formula C(n+k-1, k).|Counting_StarsBars
+M|17|Pascal's Identity relates C(n,k) to:|C(n-1, k-1) + C(n-1, k)|C(n, k-1) + C(n, k+1)|C(n+1, k)|n!|2^n|A|Standard recurrence for Pascal Triangle.|Sum of two numbers above.|Recursive combination.|Counting_Combinations
+M|18|How many ways to roll sum 7 with two dice?|4|5|6|7|12|C|Pairs: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1).|List possibilities.|6 ways.|Counting_Probability
+M|19|Number of functions from Set A (size 3) to Set B (size 2):|3^2|2^3|3*2|3+2|3!|B|Each of 3 elements has 2 choices. 2*2*2.|SizeCodomain ^ SizeDomain.|2^3 = 8.|Counting_Functions
+M|20|Number of one-to-one functions from A(size 3) to B(size 4):|P(4,3)|C(4,3)|4^3|3^4|4!|A|First element has 4 opts, next has 3, next has 2.|Permutation formula.|4*3*2.|Counting_Functions

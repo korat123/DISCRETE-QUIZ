@@ -5,3 +5,7 @@ wit;Logic;0
 Pun;Logic;3
 Korn;Logic;2
 Earth;Logic;3
+Earth;Logic;0
+Light;Logic;1
+Kor;Logic;10
+Pan;Logic;6

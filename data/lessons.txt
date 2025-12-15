@@ -1,0 +1,42 @@
+Logic_Basics|PROPOSITION: A statement that is True or False. NOT (~) flips value. AND (^) is True only if BOTH are True. OR (v) is True if AT LEAST one is True. XOR is True if they DIFFER.
+Logic_TruthTable|TRUTH TABLE RULES: 1) Implication (p->q) is FALSE only when T->F (Broken Promise). 2) Biconditional (p<->q) is TRUE when values match (T-T or F-F). 3) Rows = 2^n.
+Logic_Equivalence|EQUIVALENCES: 1) p->q == ~p v q (Important!). 2) De Morgan: ~(p^q) == ~p v ~q; ~(pvq) == ~p ^ ~q. 3) Double Negation: ~(~p) == p. 4) Contrapositive: p->q == ~q->~p.
+Logic_Tautology|TAUTOLOGY: A statement that is ALWAYS True (e.g., p v ~p). CONTRADICTION: Always False (e.g., p ^ ~p). CONTINGENCY: Can be T or F depending on inputs.
+Logic_Quantifiers|QUANTIFIERS: 'For all x' (Universal) needs ALL cases to be true. 'Exists x' (Existential) needs AT LEAST ONE. Negation: ~(For all x, P(x)) == Exists x, ~P(x).
+Logic_Inference|INFERENCE RULES: 1) Modus Ponens: (p->q, p) :. q. 2) Modus Tollens: (p->q, ~q) :. ~p. 3) Syllogism: (p->q, q->r) :. p->r. 4) Disjunctive Syllogism: (p v q, ~p) :. q.
+Logic_Translation|TRANSLATION TIPS: "All A are B" -> For all x (A(x) -> B(x)). "Some A are B" -> Exists x (A(x) ^ B(x)). Never use '->' with 'Exists'!
+BigO_Definitions|BIG-O DEFINITIONS: O(g(n)) = Upper Bound (Worst case). Omega(g(n)) = Lower Bound (Best case). Theta(g(n)) = Tight Bound (Exact growth). f(n) is O(g(n)) if f(n) <= C*g(n) for large n.
+BigO_Growth|GROWTH RATES (Low to High): O(1) < O(log n) < O(n) < O(n log n) < O(n^2) < O(n^3) < O(2^n) < O(n!). Exponential (2^n) is much worse than Polynomial (n^k).
+BigO_Polynomials|POLYNOMIALS: For f(n) = 3n^3 + 5n^2 + 10, focus ONLY on the highest degree term (n^3). Drop all constants and lower terms. Result: O(n^3).
+BigO_CodeAnalysis|CODE ANALYSIS: Simple statement = O(1). Loop 1 to n = O(n). Nested Loop (i=1..n, j=1..n) = O(n*n) = O(n^2). Loop that doubles/halves (i=i*2) = O(log n).
+BigO_Algorithms|ALGORITHM COMPLEXITY: Binary Search = O(log n). Linear Search = O(n). Merge/Quick Sort = O(n log n). Bubble/Insertion Sort = O(n^2). Access Array Index = O(1).
+BigO_DataStructures|DATA STRUCTURE OPS: Array Access = O(1). Linked List Search = O(n). Stack Push/Pop = O(1). Queue Enqueue/Dequeue = O(1). BST Search = O(log n) avg.
+BigO_MathRules|MATH RULES: log(n^k) = k*log n -> O(log n). Sum of 1..n = n(n+1)/2 -> O(n^2). Constants inside Big-O don't matter: O(100n) is just O(n).
+Relations_Properties|RELATION PROPERTIES: 1) Reflexive: (a,a) for all a. 2) Symmetric: (a,b)->(b,a). 3) Antisymmetric: (a,b) and (b,a) implies a=b. 4) Transitive: (a,b) and (b,c) -> (a,c).
+Relations_Definitions|RELATION TYPES: 'Reflexive' = Loops on every node. 'Symmetric' = Two-way streets. 'Antisymmetric' = One-way streets. 'Transitive' = Shortcuts exist.
+Relations_Equivalence|EQUIVALENCE RELATION: Must be Reflexive, Symmetric, Transitive. Examples: Equality (=), "Same birthday as", Modulo congruence. Creates disjoint Partitions.
+Relations_PartialOrder|PARTIAL ORDER (POSET): Must be Reflexive, Antisymmetric, Transitive. Examples: <= (less equal), Subset inclusion, Divisibility. Visualized with Hasse Diagrams.
+Relations_Representation|REPRESENTATION: Matrix: Reflexive = 1s on diagonal. Symmetric = Matrix equals Transpose. Digraph: Reflexive = Self-loops. Symmetric = Bidirectional arrows.
+Relations_Counting|COUNTING RELATIONS: A relation is a subset of A x A. If |A|=n, total relations = 2^(n^2). Reflexive relations = 2^(n^2 - n). Symmetric = 2^(n(n+1)/2).
+Relations_Closures|CLOSURES: The smallest relation containing R that satisfies a property. Reflexive Closure: Add (a,a). Symmetric Closure: Add reverse edges. Transitive Closure: Add all reachability paths (Warshall's Algo).
+Counting_Basics|BASIC RULES: Sum Rule (OR) -> Add ways if tasks are disjoint. Product Rule (AND) -> Multiply ways if tasks are sequential/independent.
+Counting_Permutations|PERMUTATIONS (Order Matters): Arranging n distinct items = n!. Arranging r items from n = P(n,r) = n!/(n-r)!. Keywords: Rank, Schedule, Arrange.
+Counting_Combinations|COMBINATIONS (Order Doesn't Matter): Choosing r items from n = C(n,r) = n! / [r!(n-r)!]. Keywords: Select, Group, Committee, Subset.
+Counting_Subsets|SUBSETS: The number of subsets of a set with n elements (Power Set) is 2^n. This corresponds to the sum of binomial coefficients C(n,0) + ... + C(n,n).
+Counting_AdvPermutations|INDISTINGUISHABLE PERMUTATIONS: Arranging items where some are identical (e.g., MISSISSIPPI). Formula: n! / (n1! * n2! * ...). Divide by factorials of repeat counts.
+Counting_InclusionExclusion|INCLUSION-EXCLUSION: |A U B| = |A| + |B| - |A n B|. For 3 sets: Sum singles - Sum pairs + Intersection of all 3. Prevents double counting.
+Counting_Binomial|BINOMIAL THEOREM: (x+y)^n = Sum of C(n,k) * x^(n-k) * y^k. The coefficient of x^a * y^b is C(n, b) (where a+b=n).
+Counting_Pigeonhole|PIGEONHOLE PRINCIPLE: If n items -> k bins, and n > k, at least one bin has >= 2 items. Generalized: At least one bin has ceil(n/k) items.
+Counting_StarsBars|STARS AND BARS (Basic): Distributing n identical objects into k distinct bins. Formula: C(n + k - 1, k - 1). Used for x1 + ... + xk = n.
+Counting_Probability|PROBABILITY BASICS: P(E) = |Event| / |Sample Space|. Complement: P(E) = 1 - P(~E). Independent Events: P(A and B) = P(A)*P(B).
+Counting_Functions|COUNTING FUNCTIONS: From set A (size n) to B (size m). Total functions = m^n. One-to-one (Injective) = P(m,n). Onto (Surjective) = requires Stirling numbers or Inclusion-Exclusion.
+AdvCounting_StarsBars|ADV STARS & BARS: If constraint xi >= 1, pre-fill 1 in each bin. New n' = n - k. Formula becomes C(n-1, k-1). Generally: Adjust n by subtracting constraints.
+AdvCounting_Permutations|MULTINOMIAL COEFF: Coefficient of x1^n1...xk^nk in (x1+...+xk)^n is n! / (n1! * ... * nk!). Also used for arranging objects into labeled groups.
+AdvCounting_Pigeonhole|GEN. PIGEONHOLE: To guarantee c items in one bin, you need N = k*(c-1) + 1 items. Example: To guarantee 3 people same birthday (k=365, c=3), need 365*2 + 1.
+AdvCounting_InclusionExclusion|DERANGEMENTS: Permutation where no element stays in original spot. D(n) = n! * (1 - 1/1! + 1/2! - ... + (-1)^n/n!). Approx n!/e. D(3)=2, D(4)=9.
+AdvCounting_Recurrence|RECURRENCE RELATIONS: Linear Homogeneous a_n = c1*a_{n-1} + c2*a_{n-2}. Solve characteristic eq r^2 - c1*r - c2 = 0. Roots r1, r2 give a_n = A*r1^n + B*r2^n.
+AdvCounting_Derangements|DERANGEMENTS (D_n): Number of ways to arrange n items such that NONE remain in their original position. D_n = (n-1)(D_{n-1} + D_{n-2}).
+AdvCounting_Functions|ONTO FUNCTIONS: Number of Onto functions from n to m (n >= m) = m^n - C(m,1)(m-1)^n + C(m,2)(m-2)^n... (Inclusion-Exclusion).
+AdvCounting_Multinomial|MULTINOMIAL THEOREM: Expansion of (x1 + x2 + ... + xm)^n. Number of distinct terms is C(n + m - 1, m - 1) (Stars and Bars application).
+AdvCounting_GridPath|GRID PATHS: Paths from (0,0) to (n,m) moving only Right/Up. Total steps = n+m. Must choose n Rights. Formula: C(n+m, n) or C(n+m, m).
+AdvCounting_Catalan|CATALAN NUMBERS: C_n = C(2n, n) / (n+1). Sequence: 1, 1, 2, 5, 14, 42. Apps: Balanced parentheses, Binary trees with n nodes, Triangulation of polygon.

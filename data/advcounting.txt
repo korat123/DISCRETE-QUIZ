@@ -1,5 +1,20 @@
-M|1|How many nonnegative integer solutions are there to x1 + x2 + x3 = 4?|4|5|10|15|20|D|Using stars and bars, the number of solutions is C(4+3-1,3-1) = C(6,2) = 15.
-M|2|How many functions are there from a 4-element set to a 3-element set?|7|12|24|64|81|E|Each of 4 domain elements has 3 choices, so there are 3^4 = 81 functions.
-M|3|How many permutations of the word 'LEVEL' are there?|5|10|20|30|60|D|LEVEL has 5 letters with L twice and E twice, so 5!/(2!2!) = 120/4 = 30.
-M|4|By the pigeonhole principle, how many people are needed to guarantee that at least two share the same birthday (ignoring leap years)?|364|365|366|367|730|C|With 366 people and only 365 days, at least two must share a birthday.
-M|5|A committee of 3 people is chosen from 5 men and 4 women. How many committees contain at least 1 woman?|C(5,3)|C(9,3) - C(5,3)|C(9,3) - C(4,3)|C(4,1) x C(5,2)|C(4,2) x C(5,1)|B|Total committees is C(9,3); all-male committees is C(5,3), so answer is C(9,3) - C(5,3).
+M|1|Stars and Bars: Integer solutions to x1+x2+x3=10 (non-negative)?|C(10,3)|C(12,2)|C(12,10)|C(13,3)|P(10,3)|B|Formula C(n+k-1, k-1) where n=10, k=3 bins.|C(10+3-1, 3-1) = C(12,2).|Distribute 10 stars, 2 bars.|AdvCounting_StarsBars
+M|2|Arrangements of "MISSISSIPPI"?|11!|11! / (4!4!2!)|11! / 4!|C(11,4)|11^4|B|11 letters. 4 S, 4 I, 2 P. Divide out duplicates.|Multinomial coefficient.|Factorials of repeats in denominator.|AdvCounting_Permutations
+M|3|PHP: How many people to guarantee 3 born on same day of week?|8|14|15|21|22|C|Formula: N = k(r-1) + 1. Days=7, r=3. 7(2)+1.|Need 2 full sets + 1.|7*2 + 1 = 15.|AdvCounting_Pigeonhole
+M|4|Inclusion-Exclusion for 3 sets |AuBuC| is:|Sum singles - Sum pairs + Intersection all|Sum singles + Sum pairs - Intersection all|Sum singles - Intersection all|Sum pairs - Sum singles|Sum all|A|Add individual sets, subtract overlaps, add back basic center.|Alternating signs.|Add - Subtract + Add.|AdvCounting_InclusionExclusion
+M|5|Recurrence a_n = 2a_{n-1}, a_0 = 3. What is a_3?|6|12|24|48|16|C|Pattern: 3, 6, 12, 24.|Geometric progression.|3 * 2^3.|AdvCounting_Recurrence
+M|6|Derangements of 3 items (none in original spot):|1|2|3|0|6|B|D_3 = 2. (312, 231).|Subfactorial.|Formula !n.|AdvCounting_Derangements
+M|7|Number of solutions to x1+x2+x3 = 10, where x_i >= 1?|C(9,2)|C(10,3)|C(12,2)|C(10,2)|C(9,3)|A|Pre-distribute 1 to each. Remaining = 7. C(7+3-1, 2) = C(9,2).|Or use stars and bars with gaps.|Formula C(n-1, k-1).|AdvCounting_StarsBars
+M|8|Generalized Pigeonhole: N objects, k boxes. At least one box has ceil(N/k).|True|False|Only if N < k|Only if N is even|Depends on weather|A|This is the formal statement of generalized PHP.|Ceiling function implies rounding up.|Average is N/k, one must be >= avg.|AdvCounting_Pigeonhole
+M|9|Distribute 5 distinct books to 3 children?|5^3|3^5|P(5,3)|C(5,3)|5!|B|Each book has 3 choices.|3*3*3*3*3.|Domain size 5, Codomain 3.|AdvCounting_Functions
+M|10|Distribute 5 identical apples to 3 children?|3^5|5^3|C(7,2)|C(5,3)|P(5,3)|C|Identical items = Stars and Bars. C(5+3-1, 2).|C(7,2) = 21.|Order doesn't matter for apples.|AdvCounting_StarsBars
+M|11|Solve recurrence: a_n = a_{n-1} + n, a_0=0.|n|n^2|n(n+1)/2|2^n|n!|C|0, 1, 3, 6, 10... Triangular numbers.|Sum of 1 to n.|Arithmetic series.|AdvCounting_Recurrence
+M|12|How many onto (surjective) functions from {1,2,3} to {A,B}?|3|6|8|9|2|B|Total (2^3) - Not Onto (2). 8 - 2 = 6.|Exclude functions that miss an element.|Total - Invalid.|AdvCounting_Functions
+M|13|Fibonacci Recurrence is:|F_n = F_{n-1} + F_{n-2}|F_n = 2F_{n-1}|F_n = F_{n-1} * F_{n-2}|F_n = F_{n-1} + 1|F_n = n!|A|Sum of previous two terms.|1, 1, 2, 3, 5...|Famous rabbit problem.|AdvCounting_Recurrence
+M|14|To guarantee a pair with sum 11 from {1..10}, how many to pick?|5|6|7|10|50|B|Pairs: (1,10), (2,9), (3,8), (4,7), (5,6). 5 holes. Pick 6.|Pigeonhole Principle.|Worst case: pick 1,2,3,4,5.|AdvCounting_Pigeonhole
+M|15|Coefficient of x^2 y^2 z^2 in (x+y+z)^6?|90|60|120|720|6|A|Multinomial: 6! / (2!2!2!) = 720 / 8 = 90.|Generalized binomial.|Factorial division.|AdvCounting_Multinomial
+M|16|Number of paths from (0,0) to (3,3) on grid (only Right/Up)?|C(6,3)|P(6,3)|3*3|3^3|6!|A|Total steps = 6. Choose 3 to be Rights. C(6,3).|Grid walking.|(R+U)! / R!U!.|AdvCounting_GridPath
+M|17|Degree of homogeneous recurrence a_n = a_{n-1} + a_{n-2}?|1|2|3|n|0|B|Degree is the furthest step back (n-2).|Depends on previous 2 terms.|Linear homogeneous degree 2.|AdvCounting_Recurrence
+M|18|Characteristic equation for a_n = 5a_{n-1} - 6a_{n-2} is:|r^2 - 5r + 6 = 0|r^2 + 5r - 6 = 0|r - 5 = 0|r^2 = 5r + 6|r^2 - 6r + 5 = 0|A|Move terms to left: a_n - 5a_{n-1} + 6a_{n-2} = 0.|Replace a_n with r^n.|Quadratic equation.|AdvCounting_Recurrence
+M|19|Catalan Number C_3 (balanced parens for 3 pairs) is:|3|4|5|6|10|C|Pattern: 1, 1, 2, 5, 14...|Formula C(2n,n)/(n+1).|((())), (())(), ()()(), (()()), ()(())|AdvCounting_Catalan
+M|20|Ways to put 4 indistinguishable balls in 2 distinguishable bins?|4|5|6|8|16|B|Stars and Bars: C(4+2-1, 2-1) = C(5,1) = 5.|Possibilities: (4,0), (3,1), (2,2), (1,3), (0,4).|Count them manually.|AdvCounting_StarsBars

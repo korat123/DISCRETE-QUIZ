@@ -51,7 +51,12 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# debug information files
-*.dwo
+# Ignore executables
 *.exe
-/output/
+*.o
+
+# Ignore output directory (if any)
+output/
+
+# Ignore VS Code settings (optional, usually good for groups)
+.vscode/
