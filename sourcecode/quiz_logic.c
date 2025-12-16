@@ -34,8 +34,8 @@ typedef struct {
 
 // Show Hint function
 void printHints(Question *q, int hintsRevealed) {
-    if (hintsRevealed >= 1) printf("\n   [HINT 1]: %s", q->hint1);
-    if (hintsRevealed >= 2) printf("\n   [HINT 2]: %s", q->hint2);
+    if (hintsRevealed >= 1) printf("\n   " C_YELLOW "[HINT 1]: %s" C_RESET, q->hint1);
+    if (hintsRevealed >= 2) printf("\n   " C_YELLOW "[HINT 2]: %s" C_RESET, q->hint2);
     if (hintsRevealed > 0) printf("\n");
 }
 
@@ -91,12 +91,12 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
         
         char status[50];
         // Scoring Criterias (can adapting 50.0f up to you)
-        if (percent == 100.0f) strcpy(status, "Excellent");
-        else if (percent >= 70.0f) strcpy(status, "Good");
-        else if (percent >= 50.0f) strcpy(status, "Fair");
+        if (percent == 100.0f) sprintf(status, C_GREEN "Excellent" C_RESET);
+        else if (percent >= 70.0f) sprintf(status, C_CYAN "Good" C_RESET);
+        else if (percent >= 50.0f) sprintf(status, C_YELLOW "Fair" C_RESET);
         else {
-            strcpy(status, "WEAK (Review!)"); // if sub-topic's score < 50% = weak 
-            weakIndices[weakCount] = i;       // store index to show lessons
+            sprintf(status, C_RED "WEAK (Review!)" C_RESET);
+            weakIndices[weakCount] = i;       
             weakCount++;
         }
 
@@ -112,7 +112,7 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
              printf(" - %s\n", stats[weakIndices[k]].tagName);
         }
         
-        printf("\nWould you like to start a MINI-LESSON session for ALL these topics? (y/n): ");
+        printf("\nWould you like to start a MINI-LESSON session for ALL these topics? (y = yes / n = no): ");
         char choice;
         scanf(" %c", &choice);
         int c; while ((c = getchar()) != '\n' && c != EOF) {} // flush
@@ -157,7 +157,8 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
     }
 }
 
-// Starting do quiz function
+// ... (ส่วน loadLessons, struct, printHints ด้านบนเหมือนเดิม) ...
+
 int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked) {
     if (totalQ <= 0) {
         printf("No questions loaded.\n");
@@ -185,100 +186,103 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
         attempts[i].isCorrect = 0;
         attempts[i].hintsUsed = 0;
 
-        // --- [SHUFFLE LOGIC] create shuffle order ---
-        // create array [0,1,2,3,4] and do shuffle
+        // --- [SHUFFLE LOGIC] ---
         for (int k = 0; k < 5; k++) attempts[i].shuffledOrder[k] = k;
         shuffle(attempts[i].shuffledOrder, 5);
-        // ----------------------------------------------
 
         while (1) {
             clearScreen();
             printf("\n------------------------------------\n");
-            printf("Question %d (ID %d) [%s]:\n", i + 1, cur->id, cur->tags); // show tags to debug problems(for programmers not user)
-            printf("%s\n\n", cur->question);
+            
+            // [UI FIX 1] โชว์แค่ Question Number กับ Tags (เอา ID ออก)
+            // ใช้ i + 1 คือเลขข้อปัจจุบันที่ user กำลังทำ
+            printf(C_YELLOW "Question %d" C_RESET " [%s]:\n", i + 1, cur->tags);
+            
+            // ใช้สี Cyan Bold สำหรับคำถามเหมือนเดิม
+            printf(C_CYAN C_BOLD "%s" C_RESET "\n\n", cur->question);
 
-            // show Choice from shuffle order (Mapping)
-            // A will pull content from choices[shuffledOrder[0]]
+            // [UI FIX 2] ตัวเลือกใช้ Pattern สีเดิม (เขียวตรงตัวอักษร)
             for (int k = 0; k < 5; k++) {
-                int realIdx = attempts[i].shuffledOrder[k]; // Real index in struct
-                printf("%c) %s\n", 'A' + k, cur->choices[realIdx]);
+                int realIdx = attempts[i].shuffledOrder[k]; 
+                printf(C_GREEN "%c)" C_RESET " %s\n", 'A' + k, cur->choices[realIdx]);
             }
 
             printHints(cur, attempts[i].hintsUsed);
 
             char inputBuf[100];
-            printf("\nAnswer (A-E) or 'H' for Hint: ");
+            printf("\nAnswer (A-E) or " C_YELLOW "'H' for Hint" C_RESET ": ");
             if (!fgets(inputBuf, sizeof(inputBuf), stdin)) continue;
             
             char ans = (char)toupper((unsigned char)inputBuf[0]);
 
-            // if user enter 'H' for hint
+            // Check Hint
             if (ans == 'H') {
                 if (attempts[i].hintsUsed < 2) {
                     attempts[i].hintsUsed++;
                     continue; 
                 } else {
-                    printf("\n>> You have used all hints for this question! <<\n");
+                    printf("\n" C_RED ">> You have used all hints for this question! <<" C_RESET "\n");
                     wait_ms(DELAY_SHORT);
                     continue;
                 }
             }
 
-            // answer parts
+            // Check Answer
             if (ans >= 'A' && ans <= 'E') {
-                int selectedChoiceIndex = ans - 'A'; // User answer:  A(0), B(1)...
-                
-                // Convert back to real index of data
+                int selectedChoiceIndex = ans - 'A'; 
                 int actualDataIndex = attempts[i].shuffledOrder[selectedChoiceIndex];
 
                 attempts[i].userAnswerChar = ans;
-                attempts[i].userAnswerIndex = selectedChoiceIndex; // stored choice position that user choose
+                attempts[i].userAnswerIndex = selectedChoiceIndex;
                 
-                // compare user's answer with problem's correct answer(correctIndex = Real index from Database)
+                // แจ้งผลทันที
                 if (actualDataIndex == cur->correctIndex) {
                     attempts[i].isCorrect = 1;
                     score++;
+                    printf("\n" C_GREEN ">>> CORRECT! Great Job! <<<" C_RESET "\n");
+                } else {
+                    printf("\n" C_RED ">>> WRONG ANSWER! <<<" C_RESET "\n");
                 }
-                wait_ms(DELAY_SHORT);
-                break; 
+                
+                wait_ms(DELAY_SHORT); 
+                break; // ไปข้อต่อไป
             }
 
-            printf("\n>> Invalid input! Please enter A-E or H. <<\n");
+            printf("\n" C_RED ">> Invalid input! Please enter A-E or H. <<" C_RESET "\n");
             wait_ms(DELAY_SHORT);
         }
     }
 
-    // Loading lessons
+    // ส่วนโหลด Lesson และ Skill Analysis
     Lesson lessons[50];
     int lessonCount = loadLessons("data/lessons.txt", lessons, 50);
 
     *outNumAsked = numAsked;
     pauseAndClear(DELAY_MED);
     
-    // sending out skill result and ask for lessons
     printSkillAnalysis(q, attempts, numAsked, lessons, lessonCount);
 
     return score;
-}
+}   
 
 void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
     int hasWrong = 0;
     for (int i = 0; i < numAsked; i++) if (!attempts[i].isCorrect) hasWrong = 1;
 
     if (!hasWrong) {
-        printf("\nPerfect Score! No retry needed.\n");
+        printf(C_GREEN "\nPerfect Score! No retry needed.\n" C_RESET);
         wait_ms(DELAY_LONG);
         return;
     }
 
-    printf("\nYou have incorrect answers.\n");
-    printf("Do you want to retry WRONG questions? (y/n): ");
+    printf(C_RED "\nYou have incorrect answers.\n" C_RESET);
+    printf("Do you want to retry WRONG questions? (y = yes / n = no): ");
     char choice;
     scanf(" %c", &choice);
     int c; while ((c = getchar()) != '\n' && c != EOF) {}
 
     if (tolower(choice) != 'y') {
-        // --- give the answer (Same Logic, but need to mapping correct choice ) ---
+        // --- กรณีเฉลยเลย (Show Answers) ---
         clearScreen();
         printf("\nShowing correct answers...\n");
         wait_ms(DELAY_MED);
@@ -288,18 +292,19 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                 Question *cur = &q[attempts[i].qIndex];
                 
                 clearScreen();
-                printf("Question ID %d:\n%s\n\n", cur->id, cur->question);
+                // [UI FIX 3] เปลี่ยนโชว์ ID เป็นเลขข้อ (Question X) และ Tags ให้เหมือนตอนทำ
+                printf(C_YELLOW "Question %d" C_RESET " [%s]:\n", i + 1, cur->tags);
+                printf(C_CYAN C_BOLD "%s\n\n" C_RESET, cur->question);
                 
                 // Show correct answer choice
-                // show in shuffle ordering form
                 for (int k=0; k<5; k++) {
                     int realIdx = attempts[i].shuffledOrder[k];
-                    printf("%c) %s\n", 'A'+k, cur->choices[realIdx]);
+                    printf(C_GREEN "%c)" C_RESET " %s\n", 'A'+k, cur->choices[realIdx]);
                 }
 
-                printf("\nYour answer: %c\n", attempts[i].userAnswerChar);
+                printf(C_RED "\nYour answer: %c\n" C_RESET, attempts[i].userAnswerChar);
                 
-                // find where is the correct answer of problem (cur->correctIndex) (A-E)
+                // หาว่าข้อไหนคือคำตอบที่ถูก
                 char correctChar = '?';
                 for(int k=0; k<5; k++) {
                     if (attempts[i].shuffledOrder[k] == cur->correctIndex) {
@@ -308,8 +313,9 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                     }
                 }
 
-                printf("Correct answer: %c\n", correctChar);
-                printf("Explanation: %s\n", cur->explanation);
+                printf(C_GREEN "Correct answer: %c\n" C_RESET, correctChar);
+                // สี Explanation คงไว้เป็น Cyan ให้ดูสบายตาคู่กับโจทย์
+                printf(C_CYAN "Explanation: %s\n" C_RESET, cur->explanation);
                 
                 waitForNext("\nPress (y) then Enter for next: ");
             }
@@ -317,7 +323,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
         return;
     }
 
-    // --- Retry Mode ---
+    // --- กรณี Retry Mode ---
     clearScreen();
     printf("\nRetrying wrong questions...\n");
     wait_ms(DELAY_MED);
@@ -328,16 +334,19 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
             
             while(1) {
                 clearScreen();
-                printf("\n--- RETRY ---\n");
-                printf("Question ID %d:\n%s\n\n", cur->id, cur->question);
+                printf(C_BOLD "\n--- RETRY ---\n" C_RESET);
                 
-                // Use old shuffle odering form
+                // [UI FIX 4] เปลี่ยนโชว์ ID เป็นเลขข้อ (Question X) ให้เหมือนตอนทำ
+                printf(C_YELLOW "Question %d" C_RESET " [%s]:\n", i + 1, cur->tags);
+                printf(C_CYAN C_BOLD "%s\n\n" C_RESET, cur->question);
+                
+                // Use old shuffle ordering form
                 for (int k=0; k<5; k++) {
                     int realIdx = attempts[i].shuffledOrder[k];
-                    printf("%c) %s\n", 'A'+k, cur->choices[realIdx]);
+                    printf(C_GREEN "%c)" C_RESET " %s\n", 'A'+k, cur->choices[realIdx]);
                 }
                 
-                printf("\nPrevious answer: %c\n", attempts[i].userAnswerChar);
+                printf(C_RED "\nPrevious answer: %c\n" C_RESET, attempts[i].userAnswerChar);
                 printHints(cur, attempts[i].hintsUsed);
 
                 char inputBuf[100];
@@ -350,7 +359,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                         attempts[i].hintsUsed++;
                         continue; 
                     } else {
-                        printf("\n>> No more hints available! <<\n");
+                        printf(C_RED "\n>> No more hints available! <<\n" C_RESET);
                         wait_ms(DELAY_SHORT);
                         continue;
                     }
@@ -361,12 +370,11 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                     int actualDataIdx = attempts[i].shuffledOrder[selectedIdx];
 
                     if (actualDataIdx == cur->correctIndex) {
-                        printf("\nCorrect! Great job.\n");
+                        printf(C_GREEN "\nCorrect! Great job.\n" C_RESET);
                         attempts[i].isCorrect = 1; 
                     } else {
-                        printf("\nStill Incorrect.\n");
+                        printf(C_RED "\nStill Incorrect.\n" C_RESET);
                         
-                        // find the correct answer
                         char correctChar = '?';
                         for(int k=0; k<5; k++) {
                             if (attempts[i].shuffledOrder[k] == cur->correctIndex) {
@@ -375,13 +383,13 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
                             }
                         }
                         
-                        printf("Correct was: %c\n", correctChar);
-                        printf("Explanation: %s\n", cur->explanation);
+                        printf(C_GREEN "\nCorrect was: %c\n" C_RESET, correctChar);
+                        printf(C_CYAN "Explanation: %s\n" C_RESET, cur->explanation);
                     }
                     wait_ms(DELAY_LONG);
                     break;
                 }
-                printf("\n>> Invalid input! <<\n");
+                printf(C_RED "\n>> Invalid input! <<\n" C_RESET);
                 wait_ms(DELAY_SHORT);
             }
             waitForNext("Press (y) to continue: ");

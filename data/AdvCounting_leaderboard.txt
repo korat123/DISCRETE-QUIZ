@@ -4,3 +4,4 @@ ING;AdvCounting;0
 Earth;AdvCounting;1
 Kor;AdvCounting;0
 Korn;AdvCounting;0
+Kor;AdvCounting;7

@@ -40,7 +40,7 @@ int loadLeaderboard(const char *filename, ScoreEntry entries[], int maxEntries) 
 void saveScore(const char *filename, const char *name, const char *topic, int score) {
     FILE *fp = fopen(filename, "a");
     if (!fp) {
-        printf("Cannot open leaderboard file for writing.\n");
+        printf(C_RED "Cannot open leaderboard file for writing.\n" C_RESET);
         wait_ms(DELAY_MED);
         return;
     }
@@ -54,7 +54,7 @@ void showLeaderboard(const char *topicName,
                      const char *currentPlayerName) {
     if (count == 0) {
         clearScreen();
-        printf("\nNo leaderboard data yet for topic '%s'.\n", topicName);
+        printf(C_RED "\nNo leaderboard data yet for topic '%s'.\n" C_RESET, topicName);
         wait_ms(DELAY_MED);
         return;
     }
@@ -71,26 +71,26 @@ void showLeaderboard(const char *topicName,
     }
 
     clearScreen();
-    printf("\n===== Leaderboard - %s =====\n", topicName);
-    printf("%-2s %-4s %-20s %-6s\n", "", "Rank", "Name", "Score");
+    printf(C_BOLD "\n========== Leaderboard - %s ==========\n" C_RESET, topicName);
+    printf("\n%-2s %-4s %-20s %-6s\n", "", "Rank", "Name", "Score");
 
     int maxShow = count;
     if (maxShow > 10) maxShow = 10;
 
+    // ในฟังก์ชัน showLeaderboard ช่วงวน Loop แสดงชื่อ
     for (int i = 0; i < maxShow; i++) {
         int isCurrent = (currentPlayerName != NULL &&
                          strcmp(entries[i].name, currentPlayerName) == 0);
-        const char *marker = isCurrent ? ">>" : "  ";
-
-        printf("%-2s %-4d %-20s %-6d\n",
-               marker,
-               i + 1,
-               entries[i].name,
-               entries[i].score);
+        
+        // ถ้าเป็นชื่อเรา ให้ใช้สีเขียว ถ้าคนอื่นใช้สีปกติ
+        if (isCurrent) {
+             printf(C_GREEN ">> %-4d %-20s %-6d" C_RESET "\n",
+               i + 1, entries[i].name, entries[i].score);
+        } else {
+             printf("   %-4d %-20s %-6d\n",
+               i + 1, entries[i].name, entries[i].score);
+        }
     }
-
-    printf("\nnote that: rows with '>>' mean your position in leaderboard\n");
-    wait_ms(DELAY_LONG);
 }
 
 // create leaderboard file and named it each topics

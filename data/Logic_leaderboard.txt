@@ -9,3 +9,4 @@ Earth;Logic;0
 Light;Logic;1
 Kor;Logic;10
 Pan;Logic;6
+Kong;Logic;4

@@ -2,20 +2,22 @@
 
 char showMenu(void) {
     char ch;
+
     
-    printf("\n===== Welcome to Discrete Mathematics Quiz =====\n");
-    printf("\n===== Topics =====\n");
-    printf("1. Logic\n");
-    printf("2. BigO\n");
-    printf("3. Relations\n");
-    printf("4. Counting\n");
-    printf("5. Advanced Counting\n");
-    printf("\n===== Leaderboard =====\n");
-    printf("6. View leaderboard only\n");
-    printf("\n0. Exit\n");
 
+    printf("\n" C_BOLD "======= WELCOME TO DISCRETE QUIZ =======" C_RESET "\n");
+    printf("\n" C_BOLD "===== SELECT TOPIC =====" C_RESET "\n");
+    printf(C_GREEN "[1]" C_RESET " Logic\n");
+    printf(C_GREEN "[2]" C_RESET " BigO\n");
+    printf(C_GREEN "[3]" C_RESET " Relations\n");
+    printf(C_GREEN "[4]" C_RESET " Counting\n");
+    printf(C_GREEN "[5]" C_RESET " Advanced Counting\n");
+    
+    printf("\n" C_BOLD "===== EXTRAS =====" C_RESET "\n");
+    printf(C_BLUE  "[6]" C_RESET " View Leaderboard\n");
+    printf(C_RED   "\n[0]" C_RESET " Exit Program\n");
 
-    printf("Choose topic that you want to try: ");
+    printf("\n" C_CYAN "Choose your destiny: " C_RESET);
     scanf(" %c", &ch);
     return ch;
 }
@@ -30,14 +32,22 @@ int main(void) {
     char playerName[MAX_NAME];
 
     srand((unsigned int)time(NULL));
-    clearScreen();
-    printf("\n===== Welcome to Etercsid group work project!!! =====\n");
-    wait_ms(DELAY_MED);
-    printf("\n===== Our work is creating Discrete Mathematics Quiz =====\n");
-    wait_ms(DELAY_MED);
-    printf("\n===== We hope you guys will enjoying this project =====\n");
-    wait_ms(DELAY_MED);
-    printf("\n===== So letss goo!!!! =====\n");
+    pauseAndClear(DELAY_MED);
+
+    // โชว์ ASCII Art ชื่อ DISCRETE QUIZ
+    printf(C_CYAN);
+    printf(" ____    _____   _____     _____  _____    _____   _______   _____          _____     _      _   _____   ______\n");
+    wait_ms(DELAY_SHORT);
+    printf("|  _ \\  |_   _| | ____|  /  ___/ |  __ \\  |  ___| |__   __| |  ___|        / ___ \\   | |    | | |_   _| |___   |\n");
+    wait_ms(DELAY_SHORT);
+    printf("| | | |   | |   | |___  |  /     | |__) ) | |___     | |    | |___        / /   \\ \\  | |    | |   | |      /  /\n");
+    wait_ms(DELAY_SHORT);
+    printf("| | | |   | |   |____ | |  |     |  _  /  |  ___|    | |    |  ___|      | |     | | | |    | |   | |     /  /\n");
+    wait_ms(DELAY_SHORT);
+    printf("| |_| |  _| |_   ___| | |  \\___  | | \\ \\  | |___     | |    | |___       /\\ \\___/ /  |  \\__/  |  _| |_   /  /__\n");
+    wait_ms(DELAY_SHORT);
+    printf("|____/  |_____| |_____|  \\_____/ |_|  \\_\\ |_____|    |_|    |_____|     /_/\\_____/    \\______/  |_____| /______|\n");
+    printf(C_RESET);
     pauseAndClear(DELAY_MED);
 
     // --------- In case: exit----------
@@ -46,7 +56,7 @@ int main(void) {
         char choice = showMenu();
         if (choice == '0') {
             clearScreen();
-            printf("\nThank you for your attendtion, See ya!!!\n");
+            printf(C_BOLD C_BLUE"\nThank you for your attendtion, See ya!!!\n" C_RESET);
             pauseAndClear(DELAY_MED);
             break;
         }
@@ -56,14 +66,14 @@ int main(void) {
             char lbChoice;
             while (1) {
                 clearScreen();
-                printf("\n=== View Leaderboard ===\n");
-                printf("1. Logic\n");
-                printf("2. BigO\n");
-                printf("3. Relations\n");
-                printf("4. Counting\n");
-                printf("5. Advanced Counting\n");
-                printf("\n0. Back to main menu\n");
-                printf("Choose topic: ");
+                printf("\n" C_BOLD "=== View Leaderboard ===" C_RESET "\n");
+                printf(C_BLUE  "[1]" C_RESET " Logic\n");
+                printf(C_BLUE  "[2]" C_RESET " BigO\n");
+                printf(C_BLUE  "[3]" C_RESET " Relations\n");
+                printf(C_BLUE  "[4]" C_RESET " Counting\n");
+                printf(C_BLUE  "[5]" C_RESET " Advanced Counting\n");
+                printf("\n" C_RED   "[0]" C_RESET " Back to main menu\n");
+                printf("\nChoose topic: ");
                 scanf(" %c", &lbChoice);
 
                 int chFlush;
@@ -90,7 +100,7 @@ int main(void) {
                         strcpy(topicName, "AdvCounting");
                         break;
                     default:
-                        printf("Invalid choice.\n");
+                        printf(C_RED "Invalid choice.\n" C_BOLD);
                         wait_ms(DELAY_MED);
                         continue;
                 }
@@ -101,7 +111,7 @@ int main(void) {
                 int leaderCount = loadLeaderboard(leaderboardFile, leaderboard, MAX_LEADER);
                 showLeaderboard(topicName, leaderboard, leaderCount, NULL);
 
-                waitForNext("Press (y) then (Enter) to go back to View Leaderboard menu: ");
+                waitForNext("\nPress (y) then (Enter) to go back to View Leaderboard menu: ");
             }
 
             continue;
@@ -130,7 +140,7 @@ int main(void) {
                 strcpy(topicName, "AdvCounting");
                 break;
             default:
-                printf("Invalid choice.\n");
+                printf(C_RED "Invalid choice.\n" C_RESET);
                 wait_ms(DELAY_MED);
                 continue;
         }
@@ -145,7 +155,7 @@ int main(void) {
 
         int totalQ = loadQuestions(questionFile, questions, MAX_Q);
         if (totalQ <= 0) {
-            printf("No questions found for this topic.\n");
+            printf(C_RED "No questions found for this topic.\n" C_BOLD);
             wait_ms(DELAY_MED);
             continue;
         }
@@ -154,9 +164,9 @@ int main(void) {
         int score = runQuiz(topicName, questions, totalQ, attempts, &numAsked);
 
         clearScreen();
-        printf("\n===== Result for %s (%s) =====\n", playerName, topicName);
-        printf("Score: %d / %d\n", score, numAsked);
-        wait_ms(DELAY_MED);
+        printf(C_BOLD "\n===== Result for %s (%s) =====\n" C_RESET, playerName, topicName);
+        printf(C_BOLD "\nScore: %d / %d\n" C_RESET, score, numAsked);
+        wait_ms(DELAY_LONG);
 
         char leaderboardFile[64];
         buildLeaderboardFilename(topicName, leaderboardFile, sizeof(leaderboardFile));
