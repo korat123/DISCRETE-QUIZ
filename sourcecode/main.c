@@ -2,8 +2,7 @@
 
 char showMenu(void) {
     char ch;
-
-    
+    char inputBuf[64]; // สร้าง buffer สำหรับรับค่า
 
     printf("\n" C_BOLD "======= WELCOME TO DISCRETE QUIZ =======" C_RESET "\n");
     printf("\n" C_BOLD "===== SELECT TOPIC =====" C_RESET "\n");
@@ -18,8 +17,16 @@ char showMenu(void) {
     printf(C_RED   "\n[0]" C_RESET " Exit Program\n");
 
     printf("\n" C_CYAN "Choose your destiny: " C_RESET);
-    scanf(" %c", &ch);
-    return ch;
+    
+    if (fgets(inputBuf, sizeof(inputBuf), stdin) == NULL) {
+        return '0'; // if error = exit program
+    }
+    
+    trimNewline(inputBuf);
+
+    // ถ้า user กด Enter เปล่าๆ ให้ส่งค่าว่างกลับไป
+    if (inputBuf[0] == '\0') return ' ';
+    return inputBuf[0];
 }
 
 int main(void) {
@@ -34,7 +41,7 @@ int main(void) {
     srand((unsigned int)time(NULL));
     pauseAndClear(DELAY_MED);
 
-    // โชว์ ASCII Art ชื่อ DISCRETE QUIZ
+    // show ASCII art
     printf(C_CYAN);
     printf(" ____    _____   _____     _____  _____    _____   _______   _____          _____     _      _   _____   ______\n");
     wait_ms(DELAY_SHORT);
@@ -50,7 +57,7 @@ int main(void) {
     printf(C_RESET);
     pauseAndClear(DELAY_MED);
 
-    // --------- In case: exit----------
+    // --------- In case: select 0 = exit----------
     while (1) {
         clearScreen();
         char choice = showMenu();
@@ -61,9 +68,11 @@ int main(void) {
             break;
         }
 
-        // ---------- In Case: choose leaderboard only ----------
+        // ---------- In Case: choose 6 = view leaderboard only ----------
         if (choice == '6') {
             char lbChoice;
+            char inputBuf[64];
+
             while (1) {
                 clearScreen();
                 printf("\n" C_BOLD "=== View Leaderboard ===" C_RESET "\n");
@@ -74,10 +83,10 @@ int main(void) {
                 printf(C_BLUE  "[5]" C_RESET " Advanced Counting\n");
                 printf("\n" C_RED   "[0]" C_RESET " Back to main menu\n");
                 printf("\nChoose topic: ");
-                scanf(" %c", &lbChoice);
 
-                int chFlush;
-                while ((chFlush = getchar()) != '\n' && chFlush != EOF) { }
+                if (fgets(inputBuf, sizeof(inputBuf), stdin) == NULL) break;
+                trimNewline(inputBuf);
+                lbChoice = inputBuf[0];
 
                 if (lbChoice == '0') {
                     break;
@@ -100,7 +109,7 @@ int main(void) {
                         strcpy(topicName, "AdvCounting");
                         break;
                     default:
-                        printf(C_RED "Invalid choice.\n" C_BOLD);
+                        printf(C_RED "Invalid choice.\n" C_RESET);
                         wait_ms(DELAY_MED);
                         continue;
                 }
@@ -140,14 +149,13 @@ int main(void) {
                 strcpy(topicName, "AdvCounting");
                 break;
             default:
-                printf(C_RED "Invalid choice.\n" C_RESET);
+                printf(C_RED "Invalid choice! Please enter (1 - 5)\n" C_RESET);
                 wait_ms(DELAY_MED);
                 continue;
         }
 
         printf("Enter your name: ");
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF) { /* flush */ }
+
         if (fgets(playerName, sizeof(playerName), stdin) == NULL) {
             strcpy(playerName, "Anonymous");
         }

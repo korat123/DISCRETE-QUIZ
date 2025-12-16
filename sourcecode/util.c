@@ -63,15 +63,30 @@ void pauseAndClear(int ms) {
 
 // wait until user press y or Y and then Enter
 void waitForNext(const char *prompt) {
-    char buf[16];
+    char buf[64];
+    
     while (1) {
         printf("%s", prompt);
-        if (fgets(buf, sizeof(buf), stdin) == NULL) {
-            return; // if can't read then will exit
-        }
+        if (fgets(buf, sizeof(buf), stdin) == NULL) return;
+        
         if (buf[0] == 'y' || buf[0] == 'Y') {
             break;
         }
-        // if users type others words then re-ask again 
+        
+        
+        printf(C_RED ">> Invalid input! Please press 'y' to continue." C_RESET "\n");
+        wait_ms(DELAY_SHORT); 
+        
+        // \033[1A = scroll up cursor one lineเ
+        // \033[2K = delete all in this line
+        
+        // Delete Error Message line
+        printf("\033[1A\033[2K"); 
+        
+        // Delete user answer line (Example User's press 'n' + Enter)
+        printf("\033[1A\033[2K");
+        printf("\033[1A");
+        
+        continue;
     }
 }

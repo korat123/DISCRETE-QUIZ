@@ -11,6 +11,7 @@ int loadLeaderboard(const char *filename, ScoreEntry entries[], int maxEntries) 
     char line[256];
     int count = 0;
 
+    // read user until last line and strtok = tokenizer that divide format type
     while (fgets(line, sizeof(line), fp) && count < maxEntries) {
         trimNewline(line);
         if (line[0] == '\0') continue;
@@ -77,12 +78,12 @@ void showLeaderboard(const char *topicName,
     int maxShow = count;
     if (maxShow > 10) maxShow = 10;
 
-    // ในฟังก์ชัน showLeaderboard ช่วงวน Loop แสดงชื่อ
+    // Loop for Display name
     for (int i = 0; i < maxShow; i++) {
         int isCurrent = (currentPlayerName != NULL &&
                          strcmp(entries[i].name, currentPlayerName) == 0);
         
-        // ถ้าเป็นชื่อเรา ให้ใช้สีเขียว ถ้าคนอื่นใช้สีปกติ
+        // Display user name with green color in leaderboard 
         if (isCurrent) {
              printf(C_GREEN ">> %-4d %-20s %-6d" C_RESET "\n",
                i + 1, entries[i].name, entries[i].score);
