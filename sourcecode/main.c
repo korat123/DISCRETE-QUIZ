@@ -86,6 +86,8 @@ int main(void) {
 
                 if (fgets(inputBuf, sizeof(inputBuf), stdin) == NULL) break;
                 trimNewline(inputBuf);
+                
+                
                 lbChoice = inputBuf[0];
 
                 if (lbChoice == '0') {
@@ -161,6 +163,19 @@ int main(void) {
         }
         trimNewline(playerName);
 
+        // check if format are NULL or have only spacebar will display with "Anonymous name"
+        int isOnlySpace = 1;
+        for (int i = 0; playerName[i] != '\0'; i++) {
+            if (!isspace((unsigned char)playerName[i])) {
+                isOnlySpace = 0;
+                break;
+            }
+        }
+
+        if (strlen(playerName) == 0 || isOnlySpace) {
+            strcpy(playerName, "Anonymous");
+        }
+
         int totalQ = loadQuestions(questionFile, questions, MAX_Q);
         if (totalQ <= 0) {
             printf(C_RED "No questions found for this topic.\n" C_BOLD);
@@ -169,12 +184,7 @@ int main(void) {
         }
 
         int numAsked = 0;
-        int score = runQuiz(topicName, questions, totalQ, attempts, &numAsked);
-
-        clearScreen();
-        printf(C_BOLD "\n===== Result for %s (%s) =====\n" C_RESET, playerName, topicName);
-        printf(C_BOLD "\nScore: %d / %d\n" C_RESET, score, numAsked);
-        wait_ms(DELAY_LONG);
+        int score = runQuiz(topicName,  questions, totalQ, attempts, &numAsked, playerName);
 
         char leaderboardFile[64];
         buildLeaderboardFilename(topicName, leaderboardFile, sizeof(leaderboardFile));

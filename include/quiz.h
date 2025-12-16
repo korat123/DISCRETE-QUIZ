@@ -88,14 +88,14 @@ void showLeaderboard(const char *topicName, ScoreEntry entries[], int count, con
 void buildLeaderboardFilename(const char *topicName, char *out, size_t outSize);
 
 // ---------------------- prototypes: quiz logic -------------------
-int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked);
+int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked, const char *playername);
 void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked);
 
 // Add prototype loading lessons
 int loadLessons(const char *filename, Lesson lessons[], int maxLessons);
 
 // Analyze user weak function
-void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson lessons[], int lessonCount);
+void printSkillAnalysis(const char *playerName, const char *topicName, int score, Question q[], Attempt attempts[], int numAsked, Lesson lessons[], int lessonCount);
 
 // ---------------------- prototypes: UI ---------------------------
 char showMenu(void);

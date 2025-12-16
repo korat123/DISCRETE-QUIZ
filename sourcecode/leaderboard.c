@@ -92,6 +92,7 @@ void showLeaderboard(const char *topicName,
                i + 1, entries[i].name, entries[i].score);
         }
     }
+    printf("\n'>>' will be your ranking. But if you can't see your ranking, you are not in top 10!\n");
 }
 
 // create leaderboard file and named it each topics

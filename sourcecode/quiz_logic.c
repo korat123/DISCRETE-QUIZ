@@ -40,7 +40,7 @@ void printHints(Question *q, int hintsRevealed) {
 }
 
 // User Analysis and show lessons function
-void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson lessons[], int lessonCount) {
+void printSkillAnalysis(const char *playerName, const char *topicName, int score, Question q[], Attempt attempts[], int numAsked, Lesson lessons[], int lessonCount) {
     TagStat stats[20];
     int statCount = 0;
 
@@ -70,6 +70,12 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
         stats[foundIndex].total++;
         if (isCorrect) stats[foundIndex].correct++;
     }
+
+
+    clearScreen();
+    printf(C_BOLD "\n===== Result for %s (%s) =====\n" C_RESET, playerName, topicName);
+    printf(C_BOLD "\nScore: %d / %d\n" C_RESET, score, numAsked);
+    waitForNext("\nPress (y) to go next: ");
 
     // Variables to store user's weak
     int weakIndices[20]; 
@@ -111,7 +117,7 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
              printf(" - %s\n", stats[weakIndices[k]].tagName);
         }
         
-        // [FIXED] Input Validation Loop for AI Lesson Choice
+        //  Input Validation Loop for AI Lesson Choice
         char choice;
         while (1) {
             char inputBuf[32];
@@ -168,7 +174,7 @@ void printSkillAnalysis(Question q[], Attempt attempts[], int numAsked, Lesson l
 }
 
 // Main Quiz Loop
-int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked) {
+int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[], int *outNumAsked, const char *playerName) {
     if (totalQ <= 0) {
         printf(C_RED "No questions loaded.\n" C_RESET);
         wait_ms(DELAY_MED);
@@ -214,7 +220,15 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
 
             char inputBuf[100];
             printf("\nAnswer (A-E) or " C_YELLOW "'H' for Hint" C_RESET ": ");
+
             if (!fgets(inputBuf, sizeof(inputBuf), stdin)) continue;
+            trimNewline(inputBuf);
+
+            if (strlen(inputBuf) != 1) {
+                printf("\n" C_RED ">> Invalid input! Please enter a single character (A-E or H). <<" C_RESET "\n");
+                wait_ms(DELAY_SHORT);
+                continue; 
+            }
             
             char ans = (char)toupper((unsigned char)inputBuf[0]);
 
@@ -250,6 +264,7 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
 
             printf("\n" C_RED ">> Invalid input! Please enter A-E or H. <<" C_RESET "\n");
             wait_ms(DELAY_SHORT);
+            
         }
     }
 
@@ -259,12 +274,13 @@ int runQuiz(const char *topicName, Question q[], int totalQ, Attempt attempts[],
     *outNumAsked = numAsked;
     pauseAndClear(DELAY_MED);
     
-    printSkillAnalysis(q, attempts, numAsked, lessons, lessonCount);
+    printSkillAnalysis(playerName, topicName, score, q, attempts, numAsked, lessons, lessonCount);
 
     return score;
 }   
 
 // Retry Logic
+// Retry Logic (Updated UI)
 void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
     int hasWrong = 0;
     for (int i = 0; i < numAsked; i++) if (!attempts[i].isCorrect) hasWrong = 1;
@@ -277,26 +293,43 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
 
     printf(C_RED "\nYou have incorrect answers.\n" C_RESET);
     
-    // Input Validation Loop for Retry Choice
     char choice;
+    char inputBuf[32];
+
+    printf("Do you want to retry WRONG questions? (y = yes / n = no, show answer): ");
+
     while(1) {
-        char inputBuf[32];
-        printf("Do you want to retry WRONG questions? (y = yes / n = no, show answer): ");
-        if (fgets(inputBuf, sizeof(inputBuf), stdin) == NULL) continue;
+        if (fgets(inputBuf, sizeof(inputBuf), stdin) == NULL) return; 
+        
+        if (strchr(inputBuf, '\n') == NULL) {
+            int c; while ((c = getchar()) != '\n' && c != EOF);
+        }
+        
         trimNewline(inputBuf);
 
         if (strlen(inputBuf) == 1) {
             char c = (char)tolower((unsigned char)inputBuf[0]);
             if (c == 'y' || c == 'n') {
                 choice = c;
-                break;
+                break; 
             }
         }
-        printf(C_RED "Invalid input! Please enter 'y' or 'n'.\n" C_RESET);
+        
+        // Auto-Clear
+        printf(C_RED ">> Invalid input! Please enter 'y' or 'n'." C_RESET "\n");
+        wait_ms(DELAY_SHORT);
+        
+        // delete Error Message line
+        printf("\033[1A\033[2K"); 
+        
+        // delete User prompt line
+        printf("\033[1A\033[2K");
+        
+        // Reprint Prompt
+        printf("Do you want to retry WRONG questions? (y = yes / n = no, show answer): ");
     }
 
     if (choice != 'y') {
-        // --- Show Answers ---
         clearScreen();
         printf("\nShowing correct answers...\n");
         wait_ms(DELAY_MED);
@@ -333,7 +366,7 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
         return;
     }
 
-    // --- Retry Mode ---
+    
     clearScreen();
     printf("\nRetrying wrong questions...\n");
     wait_ms(DELAY_MED);
@@ -359,7 +392,16 @@ void showWrongAndRetry(Question q[], Attempt attempts[], int numAsked) {
 
                 char inputBuf[100];
                 printf("\nRetry Answer (A-E) or 'H' for more Hint: ");
+                
                 if (!fgets(inputBuf, sizeof(inputBuf), stdin)) continue;
+                trimNewline(inputBuf);
+
+                if (strlen(inputBuf) != 1) {
+                     printf(C_RED "\n>> Invalid input! Please enter single character. <<\n" C_RESET);
+                     wait_ms(DELAY_SHORT);
+                     continue;
+                }
+
                 char ans = (char)toupper((unsigned char)inputBuf[0]);
 
                 if (ans == 'H') {

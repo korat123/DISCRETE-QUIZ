@@ -11,4 +11,9 @@ Kor;Logic;10
 Pan;Logic;6
 Kong;Logic;4
 Kor;Logic;9
-;Logic;7
+aa;Logic;7
+bb;Logic;6
+Po;Logic;5
+Anonymous;Logic;2
+Anonymous;Logic;3
+Anonymous;Logic;3
