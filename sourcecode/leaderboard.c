@@ -50,9 +50,7 @@ void saveScore(const char *filename, const char *name, const char *topic, int sc
 }
 
 // Show leaderboard from any topic's leaderboard function
-void showLeaderboard(const char *topicName,
-                     ScoreEntry entries[], int count,
-                     const char *currentPlayerName) {
+void showLeaderboard(const char *topicName,ScoreEntry entries[], int count,const char *currentPlayerName) {
     if (count == 0) {
         clearScreen();
         printf(C_RED "\nNo leaderboard data yet for topic '%s'.\n" C_RESET, topicName);

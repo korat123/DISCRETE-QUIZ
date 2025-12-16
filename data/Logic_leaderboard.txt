@@ -17,3 +17,6 @@ Po;Logic;5
 Anonymous;Logic;2
 Anonymous;Logic;3
 Anonymous;Logic;3
+okyoulike;Logic;6
+Korat;Logic;5
+sdasaf;Logic;3
