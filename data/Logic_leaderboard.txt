@@ -11,7 +11,7 @@ Kor;Logic;10
 Pan;Logic;6
 Kong;Logic;4
 Kor;Logic;9
-aa;Logic;7
+Proshacker;Logic;20
 bb;Logic;6
 Po;Logic;5
 Anonymous;Logic;2

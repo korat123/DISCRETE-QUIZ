@@ -1,3 +1,9 @@
+// personal helping on this modular
+// Korat  68070503410 all file programmer
+// Pannatorn  3439 Team lead control work flow  
+// Korn 3495 Tester test all prompt and output and report bugs
+// Manatsanan 3449 Documentation .txt files do readme.md
+
 #include "quiz.h"
 
 

@@ -1,3 +1,9 @@
+// personal helping on this modular
+// Korat  68070503410 all file programmer
+// Pannatorn  3439 Team lead control work flow  
+// Korn 3495 Tester test all prompt and output and report bugs
+// Manatsanan 3449 Documentation .txt files do readme.md
+
 #include "quiz.h"
 
 // lessons.txt loading function
@@ -97,6 +103,7 @@ void printSkillAnalysis(const char *playerName, const char *topicName, int score
         
         char status[50];
         if (percent == 100.0f) sprintf(status, C_GREEN "Excellent" C_RESET);
+        else if (percent >= 80.0f) sprintf(status, C_BLUE "Very Good" C_RESET);
         else if (percent >= 70.0f) sprintf(status, C_CYAN "Good" C_RESET);
         else if (percent >= 50.0f) sprintf(status, C_YELLOW "Fair" C_RESET);
         else {
